@@ -5,11 +5,12 @@ class Game{
     blocks;//the html elements with className="puzzle_block"
     emptyBlockCoords=[2,2];//the coordinates of the empty block
     indexes=[];//keeps track of the order of the blocks
+    container;
 
     constructor(){
        
         this.count=this.cols*this.rows;
-        this.blocks=document.getElementsByClassName("puzzle_block");//grab the blocks
+        this.container=document.getElementById('puzzle_container')
         this.init();
     }
 
@@ -18,6 +19,11 @@ class Game{
             for(let x=0;x<this.cols;x++){
                 let blockIdx=x+y*this.cols;
                 if(blockIdx+1>=this.count)break;
+                const div=document.createElement('div')
+                div.classList.add('puzzle_block')
+                div.textContent=blockIdx+1
+                this.container.appendChild(div)
+                this.blocks=document.getElementsByClassName("puzzle_block");//grab the blocks
                 let block=this.blocks[blockIdx];
                 this.positionBlockAtCoord(blockIdx,x,y);
                 block.addEventListener('click',(e)=>this.onClickOnBlock(blockIdx));
@@ -74,7 +80,6 @@ class Game{
 
     checkPuzzleSolved(){//return if puzzle was solved
         for(let i=0;i<this.indexes.length;i++){
-            //console.log(this.indexes[i],i);
             if(i==this.emptyBlockCoords[0]+this.emptyBlockCoords[1]*this.cols)continue;
             if(this.indexes[i]!=i)return false;
         }
